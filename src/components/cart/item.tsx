@@ -1,12 +1,14 @@
 import {  useMutation } from "react-query";
-import { CartType, UPDATE_CART} from "../../graphql/cart";
+import { CartType, DELETE_CART, UPDATE_CART} from "../../graphql/cart";
 import { QueryKeys, getClient, graphqlFetcher } from "../../queryClient";
-import { SyntheticEvent } from "react";
+import { ForwardedRef, RefObject, SyntheticEvent, forwardRef } from "react";
+import ItemData from "./itemData";
 
 
 
 
-const CartItem = ({id, imageUrl, price, title, amount}: CartType) => {
+const CartItem = ({id, imageUrl, price, title, amount}: CartType, 
+    ref:ForwardedRef<HTMLInputElement>) => {
     const queryClient=getClient()
     const {mutate:updateCart} = useMutation(
         ({id, amount}:{id:string, amount:number}) => graphqlFetcher(UPDATE_CART, {id,amount}),
@@ -19,7 +21,7 @@ const CartItem = ({id, imageUrl, price, title, amount}: CartType) => {
 
             const newCart = {
                 ...(prevCart || {}),
-                [id] : {...prevCart[id],amount}
+                [id] : {...prevCart[id],amount},
             }
             queryClient.setQueryData(QueryKeys.CART, newCart)
             return prevCart
@@ -27,29 +29,48 @@ const CartItem = ({id, imageUrl, price, title, amount}: CartType) => {
         onSuccess: newValue => {
             const prevCart = queryClient.getQueryData<{[key:string]:CartType}>(QueryKeys.CART)
             const newCart = {
-                ...(prevCart ||{}),
-                ...newValue ,
+                ...(prevCart || {}),
+                [id] : newValue,
             }
-            queryClient.setQueryData(QueryKeys.CART,newCart)
+            queryClient.setQueryData(QueryKeys.CART ,newCart)
         },
         },
     )
     
+    const {mutate:deleteCart} = useMutation(
+        ({id}:{id:string}) => graphqlFetcher(DELETE_CART, {id}),
+        {
+            onSuccess:() =>{
+                queryClient.invalidateQueries(QueryKeys.CART)
+            },
+        }
+    )
+
     const handleUpdateAmount = (e:SyntheticEvent) =>{
         const amount = Number((e.target as HTMLInputElement).value)
+        if(amount<1) return
         updateCart({id, amount})
     }
 
+    const handleDeleteItem = () => {
+        deleteCart({id})
+    }
+
     return(
-        <li className="cart-item">
-            <img src={imageUrl} />
-            <p className="cart-item_price">{price}</p>
-            <p className="cart-item_title">{title}</p>
-            <input type="number" className="cart-item_amount" value={amount} onChange={handleUpdateAmount}/>
+        <li className="cart-item"  >
+            <input className="cart-item_checkbox" type="checkbox" name="select-item" ref={ref}
+            data-id={id}/>
+            <ItemData imageUrl={imageUrl} price={price} title={title} />
+            <input type="number" 
+            className="cart-item_amount" 
+            value={amount} 
+            min={1}
+            onChange={handleUpdateAmount}/>
+            <button type="button" className="cart-item_button" onClick={handleDeleteItem}>삭제</button>
         </li>
     )
 }
 
 
 
-export default CartItem
+export default forwardRef(CartItem)
