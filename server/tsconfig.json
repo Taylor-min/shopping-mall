@@ -15,6 +15,6 @@
     "noEmit": false,
     "outDir": "dist"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "tempdbbuilder.ts"],
   "exclude": ["node_modules"]
 }

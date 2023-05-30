@@ -7,15 +7,15 @@ import useIntersection from "../../hooks/useIntersection"
 
 
 
-const ProductListPage = () => {
+const AdminPage = () => {
     
     const fetchMoreRef = useRef<HTMLDivElement>(null)
     const intersecting = useIntersection(fetchMoreRef)
 
 
     const { data, isSuccess, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery<Products>(
-        [QueryKeys.PRODUCTS,false],
-        ({ pageParam = '' }) => graphqlFetcher(GET_PRODUCTS, { cursor: pageParam }),
+        [QueryKeys.PRODUCTS, true],
+        ({ pageParam = '' }) => graphqlFetcher(GET_PRODUCTS, { cursor: pageParam,showDeleted:true }),
         {
             getNextPageParam: lastPage => {
                 return lastPage.products.at(-1)?.id
@@ -30,11 +30,11 @@ const ProductListPage = () => {
 
     return (
         <div>
-            <h2>상품 목록</h2>
+            <h2>등록 상품 목록</h2>
             <ProductList list={data?.pages || []} />
             <div ref={fetchMoreRef} />
         </div>
     )
 }
 
-export default ProductListPage
+export default AdminPage
