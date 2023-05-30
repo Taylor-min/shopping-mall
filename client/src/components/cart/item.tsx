@@ -7,7 +7,7 @@ import ItemData from "./itemData";
 
 
 
-const CartItem = ({id, imageUrl, price, title, amount}: CartType, 
+const CartItem = ({id, product:{imageUrl, price, title}, amount}: CartType, 
     ref:ForwardedRef<HTMLInputElement>) => {
     const queryClient=getClient()
     const {mutate:updateCart} = useMutation(
@@ -15,24 +15,29 @@ const CartItem = ({id, imageUrl, price, title, amount}: CartType,
         {
             onMutate: async ({id, amount}) =>{
             await queryClient.cancelQueries(QueryKeys.CART)
-            const prevCart = queryClient.getQueryData<{[key:string]:CartType}>(QueryKeys.CART)
+            const {cart:prevCart} = queryClient.getQueryData<{cart:CartType[]}>(
+                QueryKeys.CART,
+                ) || {cart:[] }
+            if(!prevCart) return null
 
-            if(!prevCart?.[id]) return prevCart
+            const targetIndex = prevCart.findIndex(cartItem => cartItem.id === id)
+            if(targetIndex === undefined || targetIndex < 0 ) return prevCart
 
-            const newCart = {
-                ...(prevCart || {}),
-                [id] : {...prevCart[id],amount},
-            }
-            queryClient.setQueryData(QueryKeys.CART, newCart)
+            const newCart = [...prevCart]
+            newCart.splice(targetIndex,1,{ ...newCart[targetIndex],amount})
+            queryClient.setQueryData(QueryKeys.CART, {cart:newCart})
             return prevCart
         },
-        onSuccess: newValue => {
-            const prevCart = queryClient.getQueryData<{[key:string]:CartType}>(QueryKeys.CART)
-            const newCart = {
-                ...(prevCart || {}),
-                [id] : newValue,
-            }
-            queryClient.setQueryData(QueryKeys.CART ,newCart)
+        onSuccess: ({updateCart}) => {
+            const {cart:prevCart} = queryClient.getQueryData<{cart:CartType[]}>(
+                QueryKeys.CART,
+                ) ||{cart:[]}
+            const targetIndex = prevCart?.findIndex(cartItem => cartItem.id === updateCart.id)
+            if(!prevCart || targetIndex === undefined || targetIndex < 0 ) return
+
+            const newCart = [...prevCart]
+            newCart.splice(targetIndex, 1, updateCart)
+            queryClient.setQueryData(QueryKeys.CART ,{cart:newCart})
         },
         },
     )

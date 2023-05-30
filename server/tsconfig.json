@@ -1,5 +1,5 @@
 {
-  "extends":"ts-node/node16/tsconfig.json",
+  // "extends":"ts-node/node18/tsconfig.json",
   "compilerOptions": {
     "target": "ES5",
     "module": "commonjs",
@@ -15,6 +15,6 @@
     "noEmit": false,
     "outDir": "dist"
   },
-  "include": ["**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -36,7 +36,6 @@ export const GET_PRODUCT = gql`
             description
             createdAt
         }
-
 }
 `
 export default GET_PRODUCTS
