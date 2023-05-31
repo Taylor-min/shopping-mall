@@ -7,9 +7,17 @@ const productResolver: Resolver = {
 
     Query: {
         products: (parent, { cursor = '', showDeleted= false }, { db }) => {
-            const filterDB = showDeleted? db.products : db.products.filter(product => !!product.createdAt)
-            const fromIndex = filterDB.findIndex(product => product.id === cursor) + 1
-            return filterDB.slice(fromIndex, fromIndex + 15) || []
+        const[hasCreatedAt,noCreated] = [
+            db.products
+            .filter(product => !!product.createdAt)
+            .sort((a,b) => b.createdAt! - a.createdAt!),
+            db.products.filter(product => !product.createdAt),
+        ]
+        const filteredDB = showDeleted ? [...hasCreatedAt, ...noCreated] 
+        : hasCreatedAt
+
+            const fromIndex = filteredDB.findIndex(product => product.id === cursor) + 1
+            return filteredDB.slice(fromIndex, fromIndex + 15) || []
         },
         product: (parent, { id }, { db }) => {
             const found = db.products.find((item: any) => item.id === id)
@@ -30,7 +38,7 @@ const productResolver: Resolver = {
                 price,
                 title,
                 description,
-                createAt:Date.now()
+                createdAt:Date.now()
             }
             db.products.push(newProduct)
             setJSON(db.products)

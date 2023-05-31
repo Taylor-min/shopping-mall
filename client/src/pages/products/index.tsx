@@ -4,6 +4,7 @@ import GET_PRODUCTS, { Products } from "../../graphql/products"
 import ProductList from "../../components/product/list"
 import { useEffect, useRef } from "react"
 import useIntersection from "../../hooks/useIntersection"
+import ProductItem from "../../components/product/item"
 
 
 
@@ -31,7 +32,7 @@ const ProductListPage = () => {
     return (
         <div>
             <h2>상품 목록</h2>
-            <ProductList list={data?.pages || []} />
+            <ProductList list={data?.pages || []} Item={ProductItem} />
             <div ref={fetchMoreRef} />
         </div>
     )

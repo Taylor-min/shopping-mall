@@ -4,6 +4,8 @@ import GET_PRODUCTS, { Products } from "../../graphql/products"
 import ProductList from "../../components/product/list"
 import { useEffect, useRef } from "react"
 import useIntersection from "../../hooks/useIntersection"
+import AdminItem from "../../components/product/item"
+import AddForm from "../../components/admin/addForm"
 
 
 
@@ -30,8 +32,9 @@ const AdminPage = () => {
 
     return (
         <div>
-            <h2>등록 상품 목록</h2>
-            <ProductList list={data?.pages || []} />
+            <h2>관리자 페이지</h2>
+            <AddForm />
+            <ProductList list={data?.pages || []} Item={AdminItem} />
             <div ref={fetchMoreRef} />
         </div>
     )
