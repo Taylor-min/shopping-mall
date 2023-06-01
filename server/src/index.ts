@@ -18,7 +18,7 @@ import env from './envLoader'
 //         },
 //     })
     (async () => {
-        const clientUrl = env.CLITNT_URL as string
+        const clientUrl = env.CLIENT_URL as string
         const port = env.PORT || 8000
 
         const server = new ApolloServer(
