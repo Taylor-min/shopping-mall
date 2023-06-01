@@ -2,7 +2,6 @@ import request, { RequestDocument } from 'graphql-request';
 import { QueryClient } from 'react-query'
   // import { getTodos, postTodo } from '../my-api'
   
-  type AnyOBJ = {[key:string]:any}
   // Create a client
   export const getClient = (() => {
     let client: QueryClient | null = null;
@@ -22,7 +21,6 @@ import { QueryClient } from 'react-query'
 }
 })()
 
-// const BASE_URL = 'https://reactmall.herokuapp.com//graphql'
 const BASE_URL = import.meta.env.VITE_SERVER_URL as string
 
 
@@ -64,8 +62,8 @@ const BASE_URL = import.meta.env.VITE_SERVER_URL as string
 
 export const graphqlFetcher = <T>(query:RequestDocument, variables = {}) => 
 request<T>(`${BASE_URL}/graphql`, query, variables,{
-  'Content-Type' : 'application/json',
-  'Acess-Control-Allow-Origin': BASE_URL,
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': BASE_URL,
 })
 
 export const QueryKeys = {
