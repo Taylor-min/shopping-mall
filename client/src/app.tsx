@@ -3,7 +3,8 @@ import {routes} from './routes'
 import { QueryClientProvider } from "react-query"
 import { getClient } from "./queryClient"
 import {ReactQueryDevtools} from 'react-query/devtools'
-import Gnb from "./components/gnb"
+import Gnb from "./components/header/gnb"
+import Header from "./components/header"
 
 
 const App = () => {
@@ -12,7 +13,7 @@ const App = () => {
     
     return (
     <QueryClientProvider client={queryClient}>
-        <Gnb />
+        <Header />
         {elem}
         <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

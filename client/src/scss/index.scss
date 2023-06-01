@@ -1,9 +1,16 @@
 @import 'products';
 @import 'cart';
 @import 'payment';
+@import 'layout';
 
-
-body{
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+html, body{
+    font-family:'S-CoreDream-3Light';
     margin : 0;
 }
 
@@ -12,19 +19,14 @@ ul{
     padding:0;
 
 }
+
+a {color: #333; text-decoration: none; outline: none}
+
+a:hover, a:active {text-decoration: none; color:#fff; background-color:#f59000;}
 #root{
-    max-width: 900px;
+    max-width: 1920px;
     margin: 0 auto;
     padding:0 10px;
 }
 
-.gnb{
-    ul{
-        padding : 0;
-        list-style: none;
-        display: flex;
-        flex-direction: row;
-        gap:10px;
-    }
-}
 
