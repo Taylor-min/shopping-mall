@@ -25,18 +25,12 @@ import env from './envLoader'
             {
             typeDefs:schema,
             resolvers,
-            // context:{
-            //     db:{
-            //         products: readDB(DBField.PRODUCTS),
-            //         cart:readDB(DBField.CART)
-            //     },
-            // },
         })
     const app = express()
     await server.start()
     server.applyMiddleware({
         app,
-        path:'graphql',
+        path:'/graphql',
         cors:{
             origin:[clientUrl, 'https://studio.apollographql.com'],
             credentials:true,
