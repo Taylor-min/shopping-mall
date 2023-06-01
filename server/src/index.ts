@@ -27,7 +27,7 @@ import { DBField, readDB } from './dbController'
             credentials:true,
         }
     })
-    await app.listen({ port: 8000 })
+    await app.listen({ port: process.env.PORT || 8000 })
 
     readDB(DBField.PRODUCTS)
     console.log('server listening on 8000...')
