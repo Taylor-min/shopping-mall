@@ -21,7 +21,9 @@ import { QueryClient } from 'react-query'
         return client
 }
 })()
-const BASE_URL = 'http://localhost:8000/graphql'
+
+// const BASE_URL = 'https://reactmall.herokuapp.com//graphql'
+const BASE_URL = import.meta.env.VITE_SERVER_URL as string
 
 
 // export const restFetcher = async({
@@ -60,7 +62,11 @@ const BASE_URL = 'http://localhost:8000/graphql'
 // }
 // }
 
-export const graphqlFetcher = <T>(query:RequestDocument, variables = {}) => request<T>(BASE_URL, query, variables)
+export const graphqlFetcher = <T>(query:RequestDocument, variables = {}) => 
+request<T>(`${BASE_URL}/graphql`, query, variables,{
+  'Content-Type' : 'application/json',
+  'Acess-Control-Allow-Origin': BASE_URL,
+})
 
 export const QueryKeys = {
   PRODUCTS : 'PRODUCTS',
