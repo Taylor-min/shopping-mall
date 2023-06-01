@@ -78,7 +78,7 @@ import {
         return cartId
       },
   
-      executePay: async (parent, { ids }) => {
+      excutePay: async (parent, { ids }) => {
         // createdAt이 비어있지 않은 ids들에 대해서 결제처리가 완료되었다고 가정하고
         // cart에서 이들 ids를 지워준다.
         const deleted = []
